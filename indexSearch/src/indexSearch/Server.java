@@ -7,12 +7,15 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Server{
 	private final int portNum;
+	public static LinkedHashSet<Integer> ans = new LinkedHashSet<Integer>();
 	
 	Server(int pn){
 		this.portNum = pn;
@@ -34,60 +37,28 @@ public class Server{
 							BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 							String inputLine;
 							while ((inputLine = in.readLine()) != null) {
-								Object res;
-								HashSet<Integer> ans = new HashSet<Integer>();
-								Helper h1 = new Helper(1,inputLine);
-								res = h1.start();
-								System.out.println(res);
-								if(res.toString()!="not found") {
-									ans = (HashSet)res;
+								Server.ans.clear();
+								//HashSet<Integer> ans = new HashSet<Integer>();
+								ExecutorService threadPool = Executors.newFixedThreadPool(10);
+								threadPool.submit(new Helper(1,inputLine));
+								threadPool.submit(new Helper(2,inputLine));
+								threadPool.submit(new Helper(3,inputLine));
+								threadPool.submit(new Helper(4,inputLine));
+								threadPool.submit(new Helper(5,inputLine));
+								threadPool.submit(new Helper(6,inputLine));
+								threadPool.submit(new Helper(7,inputLine));
+								threadPool.submit(new Helper(8,inputLine));
+								threadPool.submit(new Helper(9,inputLine));
+								threadPool.submit(new Helper(10,inputLine));
+
+								
+								try {
+									threadPool.awaitTermination(1, TimeUnit.SECONDS);
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
 								}
-								Helper h2 = new Helper(2,inputLine);
-								res = h2.start();
-								if(res.toString()!="not found") {
-									ans.addAll((HashSet)res);
-								}
-								Helper h3 = new Helper(3,inputLine);
-								res = h3.start();
-								if(res.toString()!="not found") {
-									ans.addAll((HashSet)res);
-								}
-								Helper h4 = new Helper(4,inputLine);
-								res = h4.start();
-								if(res.toString()!="not found") {
-									ans.addAll((HashSet)res);
-								}
-								Helper h5 = new Helper(5,inputLine);
-								res = h5.start();
-								if(res.toString()!="not found") {
-									ans.addAll((HashSet)res);
-								}
-								Helper h6 = new Helper(6,inputLine);
-								res = h6.start();
-								if(res.toString()!="not found") {
-									ans.addAll((HashSet)res);
-								}
-								Helper h7 = new Helper(7,inputLine);
-								res = h7.start();
-								if(res.toString()!="not found") {
-									ans.addAll((HashSet)res);
-								}
-								Helper h8 = new Helper(8,inputLine);
-								res = h8.start();
-								if(res.toString()!="not found") {
-									ans.addAll((HashSet)res);
-								}
-								Helper h9 = new Helper(9,inputLine);
-								res = h9.start();
-								if(res.toString()!="not found") {
-									ans.addAll((HashSet)res);
-								}
-								Helper h10 = new Helper(10,inputLine);
-								res = h10.start();
-								if(res.toString()!="not found") {
-									ans.addAll((HashSet)res);
-								}
-								//Search s = new Search();
+								System.out.println(ans);
 								out.println(ans);
 							}
 						}catch(IOException e) {
