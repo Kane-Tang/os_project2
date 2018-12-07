@@ -19,6 +19,8 @@ public class Helper implements Runnable{
 			Object obj = s.search(keywords, id);
 			HashMap<String,HashMap<Integer,Integer>> hm = new HashMap<String,HashMap<Integer,Integer>>();
 			hm = (HashMap<String,HashMap<Integer,Integer>>) obj;
+			//System.out.println(hm);
+			Server.tmp.putAll(hm);
 			LinkedHashSet<Integer> hs = new LinkedHashSet<Integer>();
 			for(HashMap<Integer,Integer> value: hm.values()) {
 				for(Integer v: value.keySet()) {
@@ -27,7 +29,7 @@ public class Helper implements Runnable{
 			}
 			//System.out.println(hs);
 			Server.ans.addAll(hs);
-			System.out.println(Server.ans);
+			//System.out.println(Server.ans);
 			//Server.ans.addAll((HashSet)s.search(keywords, id));
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block

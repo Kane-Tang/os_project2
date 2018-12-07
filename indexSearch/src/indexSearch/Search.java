@@ -42,7 +42,7 @@ public class Search {
 		}
 		for(String file: fileList) {
 			if(file != null) {
-				rank(file);
+				getAns(file);
 //				FileInputStream inputStream = new FileInputStream(file);
 //				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 //				String tmp = "";
@@ -96,7 +96,7 @@ public class Search {
 		}
 		return res;
 	}
-	public void rank(String file) throws NumberFormatException, IOException {
+	public void getAns(String file) throws NumberFormatException, IOException {
 		FileInputStream inputStream = new FileInputStream(file);
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 		String tmp = "";
