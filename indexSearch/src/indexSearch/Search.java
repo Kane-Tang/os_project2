@@ -34,6 +34,7 @@ public class Search {
 	public Object search(String keywords, int id) throws NumberFormatException, IOException {
 		String[] keys = keywords.split(" ");// keyword respectively
 		String[] fileList = new String[2];
+		//read corresponding file according to the helper id
 		if(id<=5) {
 			fileList[0] = "index.txt";
 		}else {
