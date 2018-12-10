@@ -31,7 +31,7 @@ public class Server{
 	
 	private final int portNum;
 	public static LinkedHashSet<Integer> ans = new LinkedHashSet<Integer>();
-	public static LinkedHashMap<String,HashMap<Integer,Integer>> tmp = new LinkedHashMap<String,HashMap<Integer,Integer>>();
+	//public static LinkedHashMap<String,HashMap<Integer,Integer>> tmp = new LinkedHashMap<String,HashMap<Integer,Integer>>();
 	private static List<Map.Entry<Integer,Integer>> list = new ArrayList<>();
 	Server(int pn){
 		this.portNum = pn;
@@ -54,7 +54,7 @@ public class Server{
 							String inputLine;
 							while ((inputLine = in.readLine()) != null) {
 								Server.ans.clear();
-								Server.tmp.clear();
+								//Server.tmp.clear();
 								Server.list.clear();
 								//HashSet<Integer> ans = new HashSet<Integer>();
 								//HashSet<Integer> t = new HashSet<Integer>();
@@ -103,16 +103,17 @@ public class Server{
 	
 	public void rank(BlockingQueue q) {
 		//for()
-		LinkedHashMap<String,HashMap<Integer,Integer>> tmphash = new LinkedHashMap<String,HashMap<Integer,Integer>>();
+		LinkedHashMap<String,HashMap<Integer,Integer>> tmp = new LinkedHashMap<String,HashMap<Integer,Integer>>();
 		while(!q.isEmpty()) {
 			try {
-				tmphash.putAll((HashMap<String,HashMap<Integer,Integer>>)q.take());
+				tmp.putAll((HashMap<String,HashMap<Integer,Integer>>)q.take());
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		System.out.println(tmphash);
+		//System.out.println(tmphash);
+		System.out.println(tmp);
 		LinkedHashMap<Integer,Integer> output = new LinkedHashMap<Integer,Integer>();
 		for(HashMap<Integer,Integer> value: tmp.values()) {
 			//System.out.println("value"+value);

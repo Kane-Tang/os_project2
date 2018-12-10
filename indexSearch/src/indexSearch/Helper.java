@@ -31,7 +31,7 @@ public class Helper implements Runnable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			Server.tmp.putAll(hm);
+			//Server.tmp.putAll(hm);
 			LinkedHashSet<Integer> hs = new LinkedHashSet<Integer>();
 			for(HashMap<Integer,Integer> value: hm.values()) {
 				for(Integer v: value.keySet()) {
