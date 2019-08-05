@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -23,8 +24,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class Server{
-	private static class ValueComparator implements Comparator<Map.Entry<Integer, Integer>>{
-		public int compare(Map.Entry<Integer, Integer> m, Map.Entry<Integer, Integer> n) {
+	private static class ValueComparator implements Comparator<Map.Entry<String, Integer>>{
+		public int compare(Map.Entry<String, Integer> m, Map.Entry<String, Integer> n) {
 			return n.getValue()-m.getValue();
 		}
 	}
@@ -32,7 +33,8 @@ public class Server{
 	private final int portNum;
 	public static LinkedHashSet<Integer> ans = new LinkedHashSet<Integer>();
 	//public static LinkedHashMap<String,HashMap<Integer,Integer>> tmp = new LinkedHashMap<String,HashMap<Integer,Integer>>();
-	private static List<Map.Entry<Integer,Integer>> list = new ArrayList<>();
+	private static List<Map.Entry<String,Integer>> list = new ArrayList<>();
+	private List<String> fileList = new ArrayList();
 	Server(int pn){
 		this.portNum = pn;
 	}
@@ -53,37 +55,40 @@ public class Server{
 							BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 							String inputLine;
 							while ((inputLine = in.readLine()) != null) {
+								long startTime=System.currentTimeMillis();
 								Server.ans.clear();
 								//Server.tmp.clear();
 								Server.list.clear();
 								//HashSet<Integer> ans = new HashSet<Integer>();
 								//HashSet<Integer> t = new HashSet<Integer>();
+								fileList.add("index.txt");
+								fileList.add("index2.txt");
+								fileList.add("index3.txt");
 								BlockingQueue queue = new LinkedBlockingQueue();
 								ExecutorService threadPool = Executors.newFixedThreadPool(10);
-								threadPool.submit(new Helper(1,inputLine,queue));
-								threadPool.submit(new Helper(2,inputLine,queue));
-								threadPool.submit(new Helper(3,inputLine,queue));
-								threadPool.submit(new Helper(4,inputLine,queue));
-								threadPool.submit(new Helper(5,inputLine,queue));
-								threadPool.submit(new Helper(6,inputLine,queue));
-								threadPool.submit(new Helper(7,inputLine,queue));
-								threadPool.submit(new Helper(8,inputLine,queue));
-								threadPool.submit(new Helper(9,inputLine,queue));
-								threadPool.submit(new Helper(10,inputLine,queue));
-
-								
+								threadPool.submit(new Helper(1,inputLine,queue,fileList));
+								threadPool.submit(new Helper(2,inputLine,queue,fileList));
+								threadPool.submit(new Helper(3,inputLine,queue,fileList));
+								threadPool.submit(new Helper(4,inputLine,queue,fileList));
+								threadPool.submit(new Helper(5,inputLine,queue,fileList));
+								threadPool.submit(new Helper(6,inputLine,queue,fileList));
+								threadPool.submit(new Helper(7,inputLine,queue,fileList));
+								threadPool.submit(new Helper(8,inputLine,queue,fileList));
+								threadPool.submit(new Helper(9,inputLine,queue,fileList));	
 								try {
 									threadPool.awaitTermination(1, TimeUnit.SECONDS);
 								} catch (InterruptedException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
-								//System.out.println(queue);
+								//System.out.println(list);
 								//System.out.println(ans);
 								//out.println(ans);
 								rank(queue);
 								//out.println(tmp);
 								out.println(list);
+								long endTime=System.currentTimeMillis();
+								System.out.println(endTime-startTime);
 							}
 						}catch(IOException e) {
 							System.out.println(
@@ -103,21 +108,21 @@ public class Server{
 	
 	public void rank(BlockingQueue q) {
 		//for()
-		LinkedHashMap<String,HashMap<Integer,Integer>> tmp = new LinkedHashMap<String,HashMap<Integer,Integer>>();
+		LinkedHashMap<String,HashMap<String,Integer>> tmp = new LinkedHashMap<String,HashMap<String,Integer>>();
 		while(!q.isEmpty()) {
 			try {
-				tmp.putAll((HashMap<String,HashMap<Integer,Integer>>)q.take());
+				tmp.putAll((HashMap<String,HashMap<String,Integer>>)q.take());
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		//System.out.println(tmphash);
-		System.out.println(tmp);
-		LinkedHashMap<Integer,Integer> output = new LinkedHashMap<Integer,Integer>();
-		for(HashMap<Integer,Integer> value: tmp.values()) {
+		//System.out.println(tmp);
+		LinkedHashMap<String,Integer> output = new LinkedHashMap<String,Integer>();
+		for(HashMap<String,Integer> value: tmp.values()) {
 			//System.out.println("value"+value);
-			for(Map.Entry<Integer, Integer> entry: value.entrySet()) {
+			for(Map.Entry<String, Integer> entry: value.entrySet()) {
 				if(output.containsKey(entry.getKey())) {
 					//output.remove(entry.getKey());
 					int a = entry.getValue()+output.get(entry.getKey());
@@ -127,8 +132,13 @@ public class Server{
 				}
 			}
 		}
+		//System.out.println(output);
 		//List<Map.Entry<Integer,Integer>> list = new ArrayList<>();
 		list.addAll(output.entrySet());
+//		for(Entry<String, Integer> s:list) {
+//			System.out.println(s);
+//		}
+		
 		Server.ValueComparator vc = new ValueComparator();
 		Collections.sort(list, vc);
 		//System.out.println(output);
